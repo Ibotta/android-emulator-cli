@@ -12,10 +12,10 @@ Welcome to the Android Emulator CLI tool! This tool allows you to easily spin up
 * Android System Images (Currently API 29)
 * Configures an API 29 emulator and launches it!
 
-
 ### Usage
-1) Open a terminal on your computer
-2) Copy and paste this command into your terminal and hit enter! 
-```
-curl -s https://ibotta.github.io/android-emulator-cli/android_emulator_cli.sh | bash
-```
+1. Open a terminal on your computer
+2. Copy and paste this command into your terminal and hit enter! 
+
+    ```
+    curl -s https://ibotta.github.io/android-emulator-cli/android_emulator_cli.sh | bash
+    ```
