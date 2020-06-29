@@ -16,3 +16,6 @@ Welcome to the Android Emulator CLI tool! This tool allows you to easily spin up
 ### Usage
 1) Open a terminal on your computer
 2) Copy and paste this command into your terminal and hit enter! 
+```
+curl -s https://ibotta.github.io/android-emulator-cli/android_emulator_cli.sh | bash
+```
