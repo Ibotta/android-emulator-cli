@@ -70,15 +70,15 @@ FILE2=~/Library/Android/sdk/cmdline-tools/tools/bin/sdkmanager
 
 if [ -f "$FILE2" ]; then
 	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    echo "Android CLI Tools already installed, moving on."
-    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+	echo "Android CLI Tools already installed, moving on."
+	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 else
 	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    echo "Android CLI Tools not found."
-    echo "Downloading Android Command Line Tools."
-    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    echo "Unzipping Android Command Line Tools..........."
-    LATEST_CLI_TOOLS_URL=$(curl https://developer.android.com/studio | grep -o "https:\/\/dl.google.com\/android\/repository\/commandlinetools\-mac\-[0-9]*_latest\.zip")
+	echo "Android CLI Tools not found."
+	echo "Downloading Android Command Line Tools."
+	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+	echo "Unzipping Android Command Line Tools..........."
+	LATEST_CLI_TOOLS_URL=$(curl https://developer.android.com/studio | grep -o "https:\/\/dl.google.com\/android\/repository\/commandlinetools\-mac\-[0-9]*_latest\.zip")
 	cd /tmp && { curl -O $LATEST_CLI_TOOLS_URL ; cd -; }
 	echo "Moving CLI tools to /Library/Android"
 	unzip /tmp/commandlinetools* -d /tmp
@@ -89,6 +89,7 @@ else
 	echo "export ANDROID_SDK_ROOT=~/Library/Android/sdk" >> ~/.bash_profile
 	echo "export ANDROID_HOME=~/Library/Android/sdk" >> ~/.bash_profile
 fi
+
 export ANDROID_SDK_ROOT=~/Library/Android/sdk
 export ANDROID_HOME=~/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/cmdline-tools/tools/bin/
