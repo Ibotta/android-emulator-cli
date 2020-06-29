@@ -63,9 +63,9 @@ FILE1=~/Library/Android/sdk/tools/bin/sdkmanager
 # But now they should reside here
 FILE2=~/Library/Android/sdk/cmdline-tools/tools/bin/sdkmanager
 # if [ -f "$FILE1" ]; then
-# 	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-#     echo "Android CLI Tools already installed, moving on."
-#     echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+	# echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+	# echo "Android CLI Tools already installed, moving on."
+	# echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 # el
 
 if [ -f "$FILE2" ]; then
