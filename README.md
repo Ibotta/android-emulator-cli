@@ -19,3 +19,5 @@ Welcome to the Android Emulator CLI tool! This tool allows you to easily spin up
     ```
     curl -s https://ibotta.github.io/android-emulator-cli/android_emulator_cli.sh | bash
     ```
+
+###### note: Current support for Mac OS and Linux only.
