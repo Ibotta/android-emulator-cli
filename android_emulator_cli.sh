@@ -82,8 +82,8 @@ else
 	cd /tmp && { curl -O $LATEST_CLI_TOOLS_URL ; cd -; }
 	echo "Moving CLI tools to /Library/Android"
 	unzip /tmp/commandlinetools* -d /tmp
-	mkdir -p ~/Library/Android/sdk/cmdline-tools
-	mv /tmp/tools ~/Library/Android/sdk/cmdline-tools
+	mkdir -p ~/Library/Android/sdk/cmdline-tools/latest
+	mv /tmp/cmdline-tools/* ~/Library/Android/sdk/cmdline-tools/latest
 	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 	echo "Adding Android Tools to PATH."
 	echo "export ANDROID_SDK_ROOT=~/Library/Android/sdk" >> ~/.bash_profile
@@ -92,27 +92,27 @@ fi
 
 export ANDROID_SDK_ROOT=~/Library/Android/sdk
 export ANDROID_HOME=~/Library/Android/sdk
-export PATH=$PATH:$ANDROID_HOME/cmdline-tools/tools/bin/
+export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin/
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Ensuring that you are updated to the latest version."
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Downloading Android Platform Tools and Emulator files."
-yes | ~/Library/Android/sdk/cmdline-tools/tools/bin/sdkmanager platform-tools emulator
+yes | ~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager platform-tools emulator
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo ""
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Downloading Android API 29 files."
-yes | ~/Library/Android/sdk/cmdline-tools/tools/bin/sdkmanager "platforms;android-29"
+yes | ~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager "platforms;android-29"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo ""
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Downloading an Android API 29 System Image."
-yes | ~/Library/Android/sdk/cmdline-tools/tools/bin/sdkmanager "system-images;android-29;google_apis_playstore;x86_64"
+yes | ~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager "system-images;android-29;google_apis_playstore;x86_64"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo ""
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Downloading Android Platform Tools and Emulator files."
-yes | ~/Library/Android/sdk/cmdline-tools/tools/bin/sdkmanager "build-tools;29.0.3"
+yes | ~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;29.0.3"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo ""
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
@@ -120,11 +120,11 @@ echo ""
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Updating emulator files"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-yes | ~/Library/Android/sdk/cmdline-tools/tools/bin/sdkmanager --update
+yes | ~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager --update
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Creating a new Android Emulator."
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "no" | ~/Library/Android/sdk/cmdline-tools/tools/bin/avdmanager create avd -n PixelXL29 -d "pixel_xl" -k "system-images;android-29;google_apis_playstore;x86_64"
+echo "no" | ~/Library/Android/sdk/cmdline-tools/latest/bin/avdmanager create avd -n PixelXL29 -d "pixel_xl" -k "system-images;android-29;google_apis_playstore;x86_64"
 echo ""
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Setting emulator hardware settings."
