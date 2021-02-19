@@ -135,8 +135,8 @@ SKIN_PATH=~/Library/Android/sdk/skins/pixel_2_xl
 SKIN_PATH_VAL="skin.path = $SKIN_PATH"
 {
 	echo 'fastboot.forceFastBoot = yes'
-	echo 'hw.camera.back = virtualscene'
-	echo 'hw.camera.front = emulated'
+	echo 'hw.camera.back = webcam0'
+	echo 'hw.camera.front = webcam0'
 	echo 'hw.cpu.ncore = 4'
 	echo 'hw.gpu.enabled = yes'
 	echo 'hw.gpu.mode = auto'
