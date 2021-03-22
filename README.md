@@ -21,3 +21,13 @@ Welcome to the Android Emulator CLI tool! This tool allows you to easily spin up
     ```
 
 ###### note: Current support for Mac OS and Linux only.
+
+### Technical Difficulties
+
+If your emulator has got into a bad state you can remove your emulator by running:
+
+```
+rm -rf ~/.android/avd/
+```
+
+followed by the usual `curl` script above to re-setup the emulator.
