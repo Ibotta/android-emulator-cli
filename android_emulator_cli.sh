@@ -35,20 +35,6 @@ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Welcome to the Android Emulator CLI only script!"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
-sleep 1
-
-echo; echo;
-echo "**** REQUIRED ****   Have you 'Requested administer access' yet before installation? (1/2)   **** REQUIRED ****"
-echo; echo;
-select yn in "Yes" "No"; do
-	case $yn in
-		Yes ) break;;
-		No ) echo "Exiting"; exit;;
-		* ) echo "Error: Did not recognize input. Please enter 1 or 2.";;
-	esac
-done
-
-
 # Intro END
 ########################################################
 # CPU Detection START
