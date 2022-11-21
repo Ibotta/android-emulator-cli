@@ -1,4 +1,7 @@
 #!/bin/bash
+
+########################################################
+# Intro START
 echo
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo
@@ -31,7 +34,42 @@ echo; echo;
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Welcome to the Android Emulator CLI only script!"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-sleep .5
+
+sleep 1
+
+echo; echo;
+echo "**** REQUIRED ****   Have you 'Requested administer access' yet before installation? (1/2)   **** REQUIRED ****"
+echo; echo;
+select yn in "Yes" "No"; do
+	case $yn in
+		Yes ) break;;
+		No ) echo "Exiting"; exit;;
+		* ) echo "Error: Did not recognize input. Please enter 1 or 2.";;
+	esac
+done
+
+
+# Intro END
+########################################################
+# CPU Detection START
+
+CPU_ARCH=$(arch)
+CPU_ABI=""
+if [[ "$CPU_ARCH" == "arm64" ]]; then 
+	CPU_ABI="arm64-v8a";
+elif [[ "$CPU_ARCH" == "i386" ]] | [[ "$CPU_ARCH" == "x86_64" ]]; then
+	CPU_ABI="x86_64";
+else
+	echo "ERROR: No recognizable CPU / ABI was found. Cannot continue with installation.";
+	exit;
+fi
+echo "** CPU Found: $CPU_ABI **"
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+# CPU Detection END
+########################################################
+# Java START
+
 echo "** Checking for already installed files **"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Checking for current JDK versions"
@@ -58,17 +96,14 @@ else
 	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 fi
 
-# Command line tools used to be here
-FILE1=~/Library/Android/sdk/tools/bin/sdkmanager
-# But now they should reside here
-FILE2=~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager
-# if [ -f "$FILE1" ]; then
-	# echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-	# echo "Android CLI Tools already installed, moving on."
-	# echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-# el
+# Java END
+########################################################
+# Android CLI Tools START
 
-if [ -f "$FILE2" ]; then
+# Command line tools used to have another location but now resides here.
+FILE1=~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager
+
+if [ -f "$FILE1" ]; then
 	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 	echo "Android CLI Tools already installed, moving on."
 	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
@@ -93,46 +128,121 @@ fi
 export ANDROID_SDK_ROOT=~/Library/Android/sdk
 export ANDROID_HOME=~/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin/
+
+# Android CLI Tools END
+########################################################
+# SDKManager Platform-Tools & Emulator START
+
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Ensuring that you are updated to the latest version."
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Downloading Android Platform Tools and Emulator files."
+
 yes | ~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager platform-tools emulator
+
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo ""
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "Downloading Android API 29 files."
-yes | ~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager "platforms;android-29"
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo ""
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "Downloading an Android API 29 System Image."
-yes | ~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager "system-images;android-29;google_apis_playstore;x86_64"
+
+sleep .5
+echo "Getting Recommended Android API"
+
+ANDROID_API=$(~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager --list --channel=0 | grep -o 'platforms;android-[0-9][0-9]' | awk -F"android-" '/android-/{ print $2}' | tail -2 | head -1)
+
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo ""
+echo ""
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+sleep .5
+
+echo "Downloading Android API $ANDROID_API files."
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+yes | ~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager "platforms;android-$ANDROID_API"
+
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo ""
+echo ""
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+sleep .5
+echo "Downloading an Android API $ANDROID_API System Imag for $CPU_ABI."
+SYSTEM_IMAGE="system-images;android-$ANDROID_API;google_apis_playstore;$CPU_ABI"
+yes | ~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager $SYSTEM_IMAGE
+
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo ""
+echo ""
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+sleep .5
+
 echo "Downloading Android Platform Tools and Emulator files."
-yes | ~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager "build-tools;29.0.3"
+
+BUILD_TOOLS=$(~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager --list | grep "build-tools"  | tail -1 | cut -f1 -d'|' | sed 's: ::g' )
+
+echo "Build tools found: $BUILD_TOOLS"
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+yes | ~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager "$BUILD_TOOLS"
+
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo ""
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo ""
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Updating emulator files"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
 yes | ~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager --update
+
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "Creating a new Android Emulator."
+echo ""
+
+sleep .5
+
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-echo "no" | ~/Library/Android/sdk/cmdline-tools/latest/bin/avdmanager create avd -n PixelXL29 -d "pixel_xl" -k "system-images;android-29;google_apis_playstore;x86_64"
+# Need to accept licenses for any installed packages 
+# https://developer.android.com/studio/command-line/sdkmanager#accept-licenses
+# If already accepted, then will skip.
+echo "Checking if any Licenses need to be accepted"
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+yes | ~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo ""
+
+sleep .5
+
+# SDKManager Platform-Tools & Emulator END
+########################################################
+# Android Emulator creation & launch START
+
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo; echo;
+EMULATOR_NAME="PixelXL_"$ANDROID_API"_"$CPU_ABI""
+echo "Creating a new Android Emulator called $EMULATOR_NAME."
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+echo "no" | ~/Library/Android/sdk/cmdline-tools/latest/bin/avdmanager create avd -n $EMULATOR_NAME -d "pixel_xl" -k $SYSTEM_IMAGE --force
+
 echo ""
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Setting emulator hardware settings."
-echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo ""
+
+sleep .5
+
+echo ""
+echo "no" | ~/Library/Android/sdk/cmdline-tools/latest/bin/avdmanager create avd -n ${EMULATOR_NAME} -d "pixel_xl" -k ${SYSTEM_IMAGE} --force
+ 
+sleep 2
 
 # Need to evaluate this path to set a skin
 SKIN_PATH=~/Library/Android/sdk/skins/pixel_2_xl
-SKIN_PATH_VAL="skin.path = $SKIN_PATH"
+SKIN_PATH_VAL="skin.path = ${SKIN_PATH}"
+SKIN_IMAGE_SYSDIR="image.sysdir.1 = ${SYSTEM_IMAGE}"
 {
 	echo 'fastboot.forceFastBoot = yes'
 	echo 'hw.camera.back = virtualscene'
@@ -143,9 +253,14 @@ SKIN_PATH_VAL="skin.path = $SKIN_PATH"
 	echo 'hw.initialOrientation = Portrait'
 	echo 'hw.keyboard = yes'
 	echo $SKIN_PATH_VAL
-} >> ~/.android/avd/PixelXL29.avd/config.ini
+} >> ~/.android/avd/${EMULATOR_NAME}.avd/config.ini
 
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Launching your fresh new emulator!"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-yes | ~/Library/Android/sdk/tools/emulator -avd PixelXL29 &
+
+yes | ~/Library/Android/sdk/emulator/emulator -avd "${EMULATOR_NAME}" &
+
+# Android Emulator creation & launch END
+########################################################
+# EOF
