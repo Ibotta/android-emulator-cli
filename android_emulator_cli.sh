@@ -39,19 +39,16 @@ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 ########################################################
 # CPU Detection START
 
-CPU_ARCH=$(arch)
 CPU_ABI=""
-if [[ "$CPU_ARCH" == "arm64" ]]; then 
+CPU_ARCH="$(arch)"
+if [[ $CPU_ARCH == "arm64" ]]; then 
 	CPU_ABI="arm64-v8a";
-elif [[ "$CPU_ARCH" == "i386" ]] | [[ "$CPU_ARCH" == "x86_64" ]]; then
-	CPU_ABI="x86_64";
 else
-	echo "ERROR: No recognizable CPU / ABI was found. Cannot continue with installation.";
-	exit;
+	CPU_ABI="x86_64";
 fi
 echo "** CPU Found: $CPU_ABI **"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-
+exit;
 # CPU Detection END
 ########################################################
 # Java START
