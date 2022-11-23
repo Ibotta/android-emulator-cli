@@ -39,16 +39,16 @@ echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 ########################################################
 # CPU Detection START
 
-CPU_ABI=""
 CPU_ARCH="$(arch)"
+CPU_ABI=""
 if [[ $CPU_ARCH == "arm64" ]]; then 
 	CPU_ABI="arm64-v8a";
-else
+elseß
 	CPU_ABI="x86_64";
 fi
 echo "** CPU Found: $CPU_ABI **"
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-exit;
+
 # CPU Detection END
 ########################################################
 # Java START
@@ -151,6 +151,7 @@ echo ""
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 sleep .5
+
 echo "Downloading an Android API $ANDROID_API System Imag for $CPU_ABI."
 SYSTEM_IMAGE="system-images;android-$ANDROID_API;google_apis_playstore;$CPU_ABI"
 yes | ~/Library/Android/sdk/cmdline-tools/latest/bin/sdkmanager $SYSTEM_IMAGE
