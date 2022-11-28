@@ -1,6 +1,17 @@
 #!/bin/bash
 
 ########################################################
+
+## DEVELOPER NOTES ##
+
+# This file is a work-in-progress to test out implementation details over the `curl` command
+# The code here will not be production ready and instead will be merged in a separate PR to 
+# the orginal `android_emulator_cli.sh` file.
+#
+# Once the testing is complete, this duplicate file will be removed.
+
+########################################################
+
 # Intro START
 echo
 echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
